@@ -10,9 +10,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @RestController
 @RequestMapping("/contactMessages")
@@ -73,5 +76,36 @@ public class ContactMessageController {
         return contactMessageService.getContactMessageByPathVar(id);
     }
 
+    @GetMapping("/searchByDateBetween")
+    public ResponseMessage<Page<ContactMessageResponse>> searchByDateBetween(
+                                                                             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate startDate,
+                                                                             @RequestParam("endDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate endDate,
+                                                                             @RequestParam("page") int page,
+                                                                             @RequestParam("size") int size,
+                                                                             @RequestParam(value = "sort", defaultValue = "id") String prop,
+                                                                             @RequestParam("direction") Sort.Direction direction){
+
+
+
+        Pageable pageable = PageRequest.of(page,size,Sort.by(direction,prop));
+        return contactMessageService.searchByDateBetween(startDate,endDate,pageable);
+
+    }
+
+    @GetMapping("/searchByTimeBetween")
+    public ResponseMessage<Page<ContactMessageResponse>> searchByTimeBetween(
+            @RequestParam("startTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalTime startTime,
+            @RequestParam("endTime")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalTime endTime,
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam(value = "sort", defaultValue = "id") String prop,
+            @RequestParam("direction") Sort.Direction direction){
+
+
+
+        Pageable pageable = PageRequest.of(page,size,Sort.by(direction,prop));
+        return contactMessageService.searchByTimeBetween(startTime,endTime,pageable);
+
+    }
 
 }

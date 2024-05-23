@@ -14,6 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
 
 @Service
@@ -103,6 +106,26 @@ public class ContactMessageService {
                 .object(response)
                 .build();
     }
+
+    public ResponseMessage<Page<ContactMessageResponse>> searchByDateBetween(LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        Page<ContactMesssage> contactMesssages = contactMessageRepository.findByDateBetween(startDate,endDate,pageable);
+        Page<ContactMessageResponse> responsePage = contactMesssages.map(createContactMessage::contactMessageToResponse);
+        return ResponseMessage.<Page<ContactMessageResponse>>builder()
+                .message("Contact Messages retrieved with between dates")
+                .httpStatus(HttpStatus.OK)
+                .object(responsePage)
+                .build();
+    }
+
+    public ResponseMessage<Page<ContactMessageResponse>> searchByTimeBetween(LocalTime startTime, LocalTime endTime, Pageable pageable) {
+        Page<ContactMesssage> contactMesssages = contactMessageRepository.findByTimeBetween(startTime,endTime,pageable);
+        Page<ContactMessageResponse> responsePage = contactMesssages.map(createContactMessage::contactMessageToResponse);
+        return ResponseMessage.<Page<ContactMessageResponse>>builder()
+                .message("Contact Messages retrieved with between dates")
+                .httpStatus(HttpStatus.OK)
+                .object(responsePage)
+                .build();
+    }
 }
 
 
@@ -118,9 +141,9 @@ public class ContactMessageService {
 
 // Not: *************************************** searchBySubjectByPage ***************************************- Done
 
-// Not: searchByDateBetween ***************************************
+// Not: searchByDateBetween ***************************************-Done
 
-// Not: searchByTimeBetween ***************************************
+// Not: searchByTimeBetween ***************************************-Done
 
 // Not: *********************************** deleteByIdParam *************************************** - Done
 
