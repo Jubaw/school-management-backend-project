@@ -3,30 +3,29 @@ package com.project.contactmessage.mapper;
 
 import com.project.contactmessage.dto.ContactMessageRequest;
 import com.project.contactmessage.dto.ContactMessageResponse;
-import com.project.contactmessage.entity.ContactMesssage;
+import com.project.contactmessage.entity.ContactMessage;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Component
 public class ContactMessageMapper {
 
     //POJO --> DTO
-    public ContactMessageResponse contactMessageToResponse(ContactMesssage contactMesssage){
+    public ContactMessageResponse contactMessageToResponse(ContactMessage contactMessage) {
 
         return ContactMessageResponse.builder()
-                .name(contactMesssage.getName()).subject(contactMesssage.getSubject())
-
-                .subject(contactMesssage.getEmail())
-                .message(contactMesssage.getMessage())
-                .email(contactMesssage.getEmail())
+                .name(contactMessage.getName())
+                .subject(contactMessage.getSubject())
+                .message(contactMessage.getMessage())
+                .email(contactMessage.getEmail())
                 .dateTime(LocalDateTime.now())
                 .build();
     }
+    //DTO --> POJO
 
-    public ContactMesssage requestToContactMessage(ContactMessageRequest contactMessageRequest){
-        return ContactMesssage.builder()
+    public ContactMessage requestToContactMessage(ContactMessageRequest contactMessageRequest) {
+        return ContactMessage.builder()
                 .name(contactMessageRequest.getName())
                 .subject(contactMessageRequest.getSubject())
                 .message(contactMessageRequest.getMessage())
@@ -38,6 +37,5 @@ public class ContactMessageMapper {
 
 
 
-    //DTO --> POJO
 
 }

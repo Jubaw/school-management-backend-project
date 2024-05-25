@@ -11,7 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -19,9 +18,8 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@NotBlank
 @Builder(toBuilder = true)
-public class ContactMesssage {
+public class ContactMessage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
