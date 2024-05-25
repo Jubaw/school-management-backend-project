@@ -28,6 +28,7 @@ public class AuthenticationController {
         return authenticationService.authenticateUser(loginRequest);
     }
 
+
     //TODO: HomeWork: AuthenticateUser service layer
 
     //TODO: HomeWokr: updatePassword(); --> Controller and service
