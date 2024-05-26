@@ -1,7 +1,6 @@
 package com.project.security.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project.entity.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
