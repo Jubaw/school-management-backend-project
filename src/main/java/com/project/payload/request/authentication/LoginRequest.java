@@ -13,10 +13,9 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class LoginRequest {
 
-    @NotNull(message = "Username cannot be empty")
-    private String userName;
+    @NotNull(message = "Username must not be empty")
+    private String username;
 
-    @NotNull(message = "Password cannot be empty")
+    @NotNull(message = "Password must not be empty")
     private String password;
-
 }
