@@ -2,6 +2,7 @@ package com.project.service.user;
 
 import com.project.entity.concretes.user.User;
 import com.project.entity.enums.RoleType;
+import com.project.exception.ResourceNotFound;
 import com.project.payload.mappers.UserMapper;
 import com.project.payload.messages.SuccessMessages;
 import com.project.payload.request.User.UserRequest;
@@ -10,6 +11,7 @@ import com.project.payload.response.user.UserResponse;
 import com.project.repository.user.UserRepository;
 import com.project.service.validator.UniquePropertyValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +29,7 @@ public class UserService {
     public ResponseMessage<UserResponse> saveUser(UserRequest userRequest, String userRole) {
 
         //!!! username - ssn- phoneNumber unique mi kontrolu ??
-        uniquePropertyValidator.checkDuplicate(userRequest.getUsername(), userRequest.getSsn(),
+        uniquePropertyValidator.checkForDuplicate(userRequest.getUsername(), userRequest.getSsn(),
                 userRequest.getPhoneNumber(), userRequest.getEmail());
         //!!! DTO --> POJO
         User user = userMapper.mapUserRequestToUser(userRequest);
@@ -40,7 +42,7 @@ public class UserService {
         } else if (userRole.equalsIgnoreCase("Dean")) {
             user.setUserRole(userRoleService.getUserRole(RoleType.MANAGER));
         } else if (userRole.equalsIgnoreCase("ViceDean")) {
-            user.setUserRole(userRoleService.getUserRole(RoleType.ASSISTANT_MANAGER));
+            user.setUserRole(userRoleService.getUserRole(RoleType.ASSSITANT_MANAGER));
         }
         // !!! password encode ediliyor
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -54,4 +56,21 @@ public class UserService {
                 .object(userMapper.mapUserToUserResponse(savedUser))
                 .build();
     }
+
+    public ResponseMessage<String> deleteUser(Long id) {
+        getUserById(id);
+        userRepository.deleteById(id);
+        return ResponseMessage.<String>builder()
+                .object(null)
+                .message(SuccessMessages.USER_DELETE)
+                .httpStatus(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+    public UserResponse  getUserById(Long id) {
+       return userRepository.findById(id).
+               map(userMapper::mapUserToUserResponse).orElseThrow(()->new ResourceNotFound("User not found with given ID"));
+    }
+
+
 }

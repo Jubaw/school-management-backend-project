@@ -1,14 +1,11 @@
 package com.project.controller.user;
 
 
-import com.project.entity.concretes.user.UserRole;
 import com.project.payload.request.User.UserRequest;
 import com.project.payload.response.business.ResponseMessage;
 import com.project.payload.response.user.UserResponse;
-import com.project.repository.user.UserRepository;
 import com.project.service.user.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -30,15 +27,32 @@ public class UserController {
     }
 // Not: getAllAdminOrDeanOrViceDeanByPage() ******************************************
 
+
+
     // Not :  getUserById() *********************************************************
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponse>  getUserById(@PathVariable Long id){
+        return ResponseEntity.ok(userService.getUserById(id));
+    }
 
-    // Not : deleteUser() **********************************************************
 
+
+
+// Not : deleteUser() **********************************************************
+    @DeleteMapping("/deleteUser")
+    @PreAuthorize("hasAnyAuthority('ADMIN')") // http://localhost:8080/user/deleteUser?userId=1 + DELETE
+    public ResponseMessage<String> deleteUser(@RequestParam(value = "userId") Long id){
+        return userService.deleteUser(id);
+    }
     // Not: updateAdminOrDeanOrViceDean() ********************************************
+
 
     // Not: updateUserForUser() **********************************************************
 
     // Not : getByName() ***************************************************************
-
+    @GetMapping("/{name}")
+    public ResponseMessage<String> getByName(@PathVariable String name){
+        return userService.getByName(name);
+    }
 
 }
