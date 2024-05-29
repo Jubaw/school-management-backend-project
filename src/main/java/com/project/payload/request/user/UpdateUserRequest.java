@@ -1,5 +1,4 @@
-package com.project.payload.request.User;
-
+package com.project.payload.request.user;
 
 import com.project.payload.request.abstracts.BaseUserRequest;
 import lombok.Getter;
@@ -9,8 +8,9 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
+@SuperBuilder
 @NoArgsConstructor
-@SuperBuilder // -- !!! --
-public class UserRequest extends BaseUserRequest {
+public class UpdateUserRequest extends BaseUserRequest {
+
 
 }
