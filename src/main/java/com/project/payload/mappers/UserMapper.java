@@ -2,14 +2,16 @@ package com.project.payload.mappers;
 
 import com.project.entity.concretes.user.User;
 import com.project.payload.request.abstracts.BaseUserRequest;
-import com.project.payload.request.user.UpdateUserRequest;
+import com.project.payload.request.user.UserRequest;
+import com.project.payload.response.user.StudentResponse;
+import com.project.payload.response.user.TeacherResponse;
 import com.project.payload.response.user.UserResponse;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
 
-    public User mapUserRequestToUser(BaseUserRequest userRequest){
+    public User mapUserRequestToUser(BaseUserRequest userRequest) {
 
         return User.builder()
                 .username(userRequest.getUsername())
@@ -26,7 +28,7 @@ public class UserMapper {
                 .build();
     }
 
-    public UserResponse mapUserToUserResponse(User user){
+    public UserResponse mapUserToUserResponse(User user) {
 
         return UserResponse.builder()
                 .userId(user.getId())
@@ -44,21 +46,56 @@ public class UserMapper {
 
     }
 
-    public User mapUpdatedUserRequestToUser(BaseUserRequest updatedUserRequest){
+    public StudentResponse mapUserToStudentResponse(User student) {
 
-        return User.builder()
-                .username(updatedUserRequest.getUsername())
-                .name(updatedUserRequest.getName())
-                .surname(updatedUserRequest.getSurname())
-                .password(updatedUserRequest.getPassword())
-                .ssn(updatedUserRequest.getSsn())
-                .birthDay(updatedUserRequest.getBirthDay())
-                .birthPlace(updatedUserRequest.getBirthPlace())
-                .phoneNumber(updatedUserRequest.getPhoneNumber())
-                .gender(updatedUserRequest.getGender())
-                .email(updatedUserRequest.getEmail())
-                .built_in(updatedUserRequest.getBuiltIn())
+        return StudentResponse.builder()
+                .userId(student.getId())
+                .username(student.getUsername())
+                .name(student.getName())
+                .surname(student.getSurname())
+                .birthDay(student.getBirthDay())
+                .birthPlace(student.getBirthPlace())
+                .phoneNumber(student.getPhoneNumber())
+                .gender(student.getGender())
+                .email(student.getEmail())
+                .fatherName(student.getFatherName())
+                .motherName(student.getMotherName())
+                .studentNumber(student.getStudentNumber())
+                .isActive(student.isActive())
                 .build();
     }
 
+    public TeacherResponse mapUserToTeacherResponse(User teacher) {
+        return TeacherResponse.builder()
+                .userId(teacher.getId())
+                .username(teacher.getUsername())
+                .name(teacher.getName())
+                .surname(teacher.getSurname())
+                .birthDay(teacher.getBirthDay())
+                .birthPlace(teacher.getBirthPlace())
+                .ssn(teacher.getSsn())
+                .phoneNumber(teacher.getPhoneNumber())
+                .gender(teacher.getGender())
+                .email(teacher.getEmail())
+                .lessonPrograms(teacher.getLessonsProgramList())
+                .isAdvisorTeacher(teacher.getIsAdvisor())
+                .build();
+    }
+
+
+    public User mapUserRequestToUpdatedUser(UserRequest userRequest, Long userId) {
+        return User.builder()
+                .id(userId)
+                .username(userRequest.getUsername())
+                .name(userRequest.getName())
+                .surname(userRequest.getSurname())
+                .password(userRequest.getPassword())
+                .ssn(userRequest.getSsn())
+                .birthDay(userRequest.getBirthDay())
+                .birthPlace(userRequest.getBirthPlace())
+                .phoneNumber(userRequest.getPhoneNumber())
+                .gender(userRequest.getGender())
+                .email(userRequest.getEmail())
+                .build();
+    }
 }

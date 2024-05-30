@@ -4,7 +4,9 @@ import com.project.entity.concretes.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User,Long> {
@@ -12,15 +14,18 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     User findByUsernameEquals(String username);
 
+    User findByUsername(String username);
+
     boolean existsByUsername(String username);
 
-    boolean existsBySssn(String ssn);
+    boolean existsBySsn(String ssn);
 
     boolean existsByPhoneNumber(String phone);
 
     boolean existsByEmail(String email);
 
-    Page<User> findByUserRoleEquals(String userRole, Pageable pageable);
+    @Query("SELECT u FROM User u WHERE u.userRole.roleName = :roleName") // JPQL versiyonu
+    Page<User> findByUserByRole(String roleName, Pageable pageable);
 
-    Page<User> findByUsername(String username, Pageable pageable);
+    List<User> getUserByNameContaining(String name);
 }

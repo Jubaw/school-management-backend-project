@@ -6,7 +6,7 @@ public enum RoleType {
     TEACHER("Teacher"),
     STUDENT("Student"),
     MANAGER("Dean"),
-    ASSSITANT_MANAGER("ViceDean");
+    ASSISTANT_MANAGER("ViceDean");
 
 
 
