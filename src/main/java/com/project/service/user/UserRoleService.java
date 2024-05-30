@@ -14,13 +14,10 @@ import org.springframework.stereotype.Service;
 public class UserRoleService {
 
     private final UserRoleRepository userRoleRepository;
-    private final UserRequest userRequest;
-
 
     public UserRole getUserRole(RoleType roleType){
-      return   userRoleRepository.findByEnumRoleEquals(roleType).orElseThrow(()->
-              new ResourceNotFound(ErrorMessages.ROLE_NOT_FOUND));
-
+        return userRoleRepository.findByEnumRoleEquals(roleType).orElseThrow(()->
+                new ResourceNotFound(ErrorMessages.ROLE_NOT_FOUND));
     }
 
 }

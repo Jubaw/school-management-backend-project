@@ -11,9 +11,9 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
 public abstract class BaseUserRequest extends AbstractUserRequest {
 
 
