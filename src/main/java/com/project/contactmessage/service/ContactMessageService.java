@@ -8,7 +8,7 @@ import com.project.contactmessage.mapper.ContactMessageMapper;
 import com.project.contactmessage.messages.Messages;
 import com.project.contactmessage.repository.ContactMessageRepository;
 import com.project.exception.ConflictException;
-import com.project.exception.ResourceNotFound;
+import com.project.exception.ResourceNotFoundException;
 import com.project.payload.response.business.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -85,7 +85,7 @@ public class ContactMessageService {
 
     public ContactMessage getContactMessageById(Long id){
         return contactMessageRepository.findById(id).orElseThrow(()->
-                new ResourceNotFound(Messages.NOT_FOUND_MESSAGE));
+                new ResourceNotFoundException(Messages.NOT_FOUND_MESSAGE));
     }
 
 

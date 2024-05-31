@@ -24,17 +24,35 @@ public class TeacherController {
 
     @PostMapping("/save") // http://localhost:8080/teacher/save + JSON + POST
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ResponseMessage<TeacherResponse>> saveTeacher(@RequestBody @Valid TeacherRequest teacherRequest){
+    public ResponseEntity<ResponseMessage<TeacherResponse>> saveTeacher(@RequestBody @Valid TeacherRequest teacherRequest) {
         return ResponseEntity.ok(teacherService.saveTeacher(teacherRequest));
     }
-    //TODO: ODEV updateTeacherById() ************
 
-    //TODO: Odev saveAdvisorTeacherByTeacherId()
+    // Not: ODEVVV updateTeacherById() ***************************************************
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @PutMapping("/update/{userId}")  // http://localhost:8080/user/update/1
+    public ResponseMessage<TeacherResponse> updateTeacherForManagers(@RequestBody @Valid TeacherRequest teacherRequest,
+                                                                     @PathVariable Long userId) {
+        return teacherService.updateTeacherForManagers(teacherRequest, userId);
+    }
 
-    //TODO: Odev deleteAdvisorTeacherById()
+    // Not: ODEVV SaveAdvisorTeacherByTeacherId() ****************************************
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @PatchMapping("/saveAdvisorTeacher/{teacherId}") // http://localhost:8080/teacher/saveAdvisorTeacher/1
+    public ResponseMessage<UserResponse> saveAdvisorTeacher(@PathVariable Long teacherId) {
+        return teacherService.saveAdvisorTeacher(teacherId);
+    }
 
-    //Not: getAllStudentsByAdvisorUserName()
-    //!! Bir rehber öğretmenin kendi öğrencilerinin tamamını getiren metod
+    // Not : ODEVV  deleteAdvisorTeacherById() *******************************************
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @DeleteMapping("/deleteAdvisorTeacherById/{id}")// http://localhost:8080/teacher/deleteAdvisorTeacherById/1
+    public ResponseMessage<UserResponse> deleteAdvisorTeacherById(@PathVariable Long id) {
+        return teacherService.deleteAdvisorTeacherById(id);
+    }
+
+
+    // Not: GetAllStudentByAdvisorUserName() **********************************************
+    // !!! Bir rehber ogretmenin kendi ogrencilerin tamamini getiren metod
     @GetMapping("/getAllStudentByAdvisorUsername") // http://localhost:8080/teacher/getAllStudentByAdvisorUsername
     @PreAuthorize("hasAnyAuthority('TEACHER')")
     public List<StudentResponse> getAllStudentByAdvisorUsername(HttpServletRequest request) {
@@ -44,13 +62,11 @@ public class TeacherController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     @GetMapping("/getAllAdvisorTeacher") // http://localhost:8080/teacher/getAllAdvisorTeacher
-    public List<UserResponse> getAllAdvisorTeacher(){
+    public List<UserResponse> getAllAdvisorTeacher() {
         return teacherService.getAllAdvisorTeacher();
-
     }
 
-    //TODO: LESSON PROGRAM EKLEME
-
+    // TODO: LESSON PROGRAM ekleme
 
 
 

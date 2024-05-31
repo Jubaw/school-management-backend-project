@@ -4,7 +4,7 @@ import com.project.entity.concretes.user.User;
 import com.project.entity.enums.RoleType;
 import com.project.exception.BadRequestException;
 import com.project.exception.ConflictException;
-import com.project.exception.ResourceNotFound;
+import com.project.exception.ResourceNotFoundException;
 import com.project.payload.mappers.UserMapper;
 import com.project.payload.messages.ErrorMessages;
 import com.project.payload.messages.SuccessMessages;
@@ -84,7 +84,7 @@ public class UserService {
     public ResponseMessage<BaseUserResponse> getUserById(Long userId) {
         BaseUserResponse baseUserResponse;
         User user = userRepository.findById(userId).orElseThrow((() ->
-                new ResourceNotFound(String.format(ErrorMessages.NOT_FOUND_USER_MESSAGE, userId))));
+                new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_USER_MESSAGE, userId))));
 
         if (user.getUserRole().getRoleType() == RoleType.STUDENT) {
             baseUserResponse = userMapper.mapUserToStudentResponse(user);

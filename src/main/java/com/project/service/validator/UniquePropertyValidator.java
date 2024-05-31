@@ -13,53 +13,53 @@ import com.project.payload.request.abstracts.AbstractUserRequest;
 @RequiredArgsConstructor
 public class UniquePropertyValidator {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public void checkDuplicate(String username, String ssn, String phone, String email) {
+    public void checkDuplicate(String username, String ssn, String phone, String email){
 
 
-        if (userRepository.existsByUsername(username)) {
+        if(userRepository.existsByUsername(username)){
             throw new ConflictException(String.format(ErrorMessages.ALREADY_REGISTER_MESSAGE_USERNAME, username));
         }
 
-        if (userRepository.existsBySsn(ssn)) {
+        if(userRepository.existsBySsn(ssn)){
             throw new ConflictException(String.format(ErrorMessages.ALREADY_REGISTER_MESSAGE_SSN, ssn));
         }
 
-        if (userRepository.existsByPhoneNumber(phone)) {
+        if(userRepository.existsByPhoneNumber(phone)){
             throw new ConflictException(String.format(ErrorMessages.ALREADY_REGISTER_MESSAGE_PHONE, phone));
         }
 
-        if (userRepository.existsByEmail(email)) {
+        if(userRepository.existsByEmail(email)){
             throw new ConflictException(String.format(ErrorMessages.ALREADY_REGISTER_MESSAGE_EMAIL, email));
         }
 
     }
 
-    public void checkUniqueProperties(User user, AbstractUserRequest abstractUserRequest) {
+    public void checkUniqueProperties(User user, AbstractUserRequest abstractUserRequest){
         String updatedUsername = "";
         String updatedSnn = "";
         String updatedPhone = "";
         String updatedEmail = "";
         boolean isChanged = false;
-        if (!user.getUsername().equalsIgnoreCase(abstractUserRequest.getUsername())) {
+        if(!user.getUsername().equalsIgnoreCase(abstractUserRequest.getUsername())){
             updatedUsername = abstractUserRequest.getUsername();
             isChanged = true;
         }
-        if (!user.getSsn().equalsIgnoreCase(abstractUserRequest.getSsn())) {
+        if(!user.getSsn().equalsIgnoreCase(abstractUserRequest.getSsn())){
             updatedSnn = abstractUserRequest.getSsn();
             isChanged = true;
         }
-        if (!user.getPhoneNumber().equalsIgnoreCase(abstractUserRequest.getPhoneNumber())) {
+        if(!user.getPhoneNumber().equalsIgnoreCase(abstractUserRequest.getPhoneNumber())){
             updatedPhone = abstractUserRequest.getPhoneNumber();
             isChanged = true;
         }
-        if (!user.getEmail().equalsIgnoreCase(abstractUserRequest.getEmail())) {
+        if(!user.getEmail().equalsIgnoreCase(abstractUserRequest.getEmail())){
             updatedEmail = abstractUserRequest.getEmail();
             isChanged = true;
         }
 
-        if (isChanged) {
+        if(isChanged) {
             checkDuplicate(updatedUsername, updatedSnn, updatedPhone, updatedEmail);
         }
 

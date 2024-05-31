@@ -1,8 +1,9 @@
 package com.project.service.helper;
 
 import com.project.entity.concretes.user.User;
+import com.project.entity.enums.RoleType;
 import com.project.exception.BadRequestException;
-import com.project.exception.ResourceNotFound;
+import com.project.exception.ResourceNotFoundException;
 import com.project.payload.messages.ErrorMessages;
 import com.project.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class MethodHelper {
     // !!! isUserExist
     public User isUserExist(Long userId) {
         return userRepository.findById(userId).orElseThrow(() ->
-                new ResourceNotFound(String.format(ErrorMessages.NOT_FOUND_USER_MESSAGE,
+                new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_USER_MESSAGE,
                         userId)));
     }
 
@@ -30,7 +31,7 @@ public class MethodHelper {
     public User isUserExistsByUsername(String username){
         User user =  userRepository.findByUsername(username);
         if (user.getId() == null){
-            throw new ResourceNotFound(ErrorMessages.NOT_FOUND_USER_MESSAGE);
+            throw new ResourceNotFoundException(ErrorMessages.NOT_FOUND_USER_MESSAGE);
         }
         return user;
     }
@@ -38,9 +39,19 @@ public class MethodHelper {
     //!!! Advisor kontrolü
     public void checkAdvisor(User user){
         if (Boolean.FALSE.equals(user.getIsAdvisor())){
-            throw new ResourceNotFound(String.format(
+            throw new ResourceNotFoundException(String.format(
                     ErrorMessages.NOT_FOUND_ADVISOR_MESSAGE,
                     user.getId()));
         }
     }
+
+    // !!! Rol kontrolu yapan method
+    public void checkRole(User user, RoleType roleType){
+        if (!user.getUserRole().getRoleType().equals(roleType)) {
+            throw new ResourceNotFoundException(
+                    String.format(ErrorMessages.NOT_FOUND_USER_WITH_ROLE_MESSAGE, user.getId(),roleType));
+        }
+    }
+
+
 }
