@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
 
+
     private final UserRepository userRepository;
     private final UniquePropertyValidator uniquePropertyValidator;
     private final UserMapper userMapper;
@@ -182,10 +183,16 @@ public class UserService {
     // Not : getByName() ***************************************************************
     public List<UserResponse> getUserByName(String name) {
 
-        return userRepository.getUserByNameContaining(name)
+        return userRepository.getUserByNameContaining(name)//
                 .stream()
                 .map(userMapper::mapUserToUserResponse)
                 .collect(Collectors.toList()) ;
     }
+
+    public long countAllAdmins(){
+        return userRepository.countAdmin(RoleType.ADMIN);
+    }
+
+
 }
 

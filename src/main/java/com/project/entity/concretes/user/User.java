@@ -66,7 +66,7 @@ public class User {
 
     private Boolean isAdvisor;
 
-    private Long advisorTeacherID; //Bu öğrenciler için lazım,
+    private Long advisorTeacherId; //Bu öğrenciler için lazım,
 
     @Enumerated(EnumType.STRING)
     private Gender gender; // MALE , male , Male , MalE

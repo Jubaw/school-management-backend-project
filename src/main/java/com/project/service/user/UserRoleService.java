@@ -9,6 +9,8 @@ import com.project.repository.user.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserRoleService {
@@ -19,5 +21,10 @@ public class UserRoleService {
         return userRoleRepository.findByEnumRoleEquals(roleType).orElseThrow(()->
                 new ResourceNotFound(ErrorMessages.ROLE_NOT_FOUND));
     }
+
+    public List<UserRole> getAllUserRole(){
+        return userRoleRepository.findAll();
+    }
+
 
 }
