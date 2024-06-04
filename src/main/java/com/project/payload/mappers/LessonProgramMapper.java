@@ -15,7 +15,8 @@ import java.util.Set;
 public class LessonProgramMapper {
 
     public LessonProgram mapLessonProgramRequestToLessonProgram(LessonProgramRequest lessonProgramRequest,
-                                                                Set<Lesson> lessonSet, EducationTerm educationTerm) {
+                                                                Set<Lesson> lessonSet, EducationTerm educationTerm){
+
         return LessonProgram.builder()
                 .startTime(lessonProgramRequest.getStartTime())
                 .stopTime(lessonProgramRequest.getStopTime())
@@ -25,8 +26,8 @@ public class LessonProgramMapper {
                 .build();
     }
 
-
     public LessonProgramResponse mapLessonProgramToLessonProgramResponse(LessonProgram lessonProgram){
+
         return LessonProgramResponse.builder()
                 .day(lessonProgram.getDay())
                 .startTime(lessonProgram.getStartTime())
@@ -34,6 +35,15 @@ public class LessonProgramMapper {
                 .lessonProgramId(lessonProgram.getId())
                 .lessonName(lessonProgram.getLessons())
                 .build();
+    }
 
+    public LessonProgramResponse mapLessonProgramtoLessonProgramResponse(LessonProgram lessonProgram){
+        return LessonProgramResponse.builder()
+                .day(lessonProgram.getDay())
+                .startTime(lessonProgram.getStartTime())
+                .stopTime(lessonProgram.getStopTime())
+                .lessonProgramId(lessonProgram.getId())
+                .lessonName(lessonProgram.getLessons())
+                .build();
     }
 }
