@@ -14,6 +14,7 @@ import com.project.repository.business.LessonProgramRepository;
 import com.project.service.helper.PageableHelper;
 import com.project.service.validator.DateTimeValidator;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.apache.bcel.generic.RET;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -89,6 +90,15 @@ public class LessonProgramService {
 
     public LessonProgramResponse getLessonProgramById(Long id){
         return lessonProgramMapper.mapLessonProgramtoLessonProgramResponse(isLessonProgramExistById(id));
+    }
+
+    public Set<LessonProgram> getLessonProgramById(Set<Long> lessonIdSet){
+        Set<LessonProgram> lessonPrograms = lessonProgramRepository.getLessonProgramByLessonProgramIdList(lessonIdSet);
+
+        if (lessonPrograms.isEmpty()){
+            throw new ResourceNotFoundException(ErrorMessages.NOT_FOUND_LESSON_PROGRAM_MESSAGE_WITHOUT_ID_INFO);
+        }
+        return lessonPrograms;
     }
 
     private LessonProgram isLessonProgramExistById(Long id){

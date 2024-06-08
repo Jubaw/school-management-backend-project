@@ -1,17 +1,20 @@
 package com.project.service.user;
 
+import com.project.entity.concretes.business.LessonProgram;
 import com.project.entity.concretes.user.User;
 import com.project.entity.enums.RoleType;
 import com.project.exception.ConflictException;
 import com.project.payload.mappers.UserMapper;
 import com.project.payload.messages.ErrorMessages;
 import com.project.payload.messages.SuccessMessages;
+import com.project.payload.request.business.ChooseLessonTeacherRequest;
 import com.project.payload.request.user.TeacherRequest;
 import com.project.payload.response.business.ResponseMessage;
 import com.project.payload.response.user.StudentResponse;
 import com.project.payload.response.user.TeacherResponse;
 import com.project.payload.response.user.UserResponse;
 import com.project.repository.user.UserRepository;
+import com.project.service.business.LessonProgramService;
 import com.project.service.helper.MethodHelper;
 import com.project.service.validator.UniquePropertyValidator;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,20 +36,23 @@ public class TeacherService {
     private final UserRoleService userRoleService;
     private final PasswordEncoder passwordEncoder;
     private final MethodHelper methodHelper;
+    private final LessonProgramService lessonProgramService;
 
     public ResponseMessage<TeacherResponse> saveTeacher(TeacherRequest teacherRequest) {
 
-
+        Set<LessonProgram> lessonProgramSet =
+                lessonProgramService.getLessonProgramById(teacherRequest.getLessonIdList());
         //!!! unique kontrolu
         uniquePropertyValidator.checkDuplicate(teacherRequest.getUsername(),
-                teacherRequest.getSsn(), teacherRequest.getPhoneNumber(),teacherRequest.getEmail());
+                teacherRequest.getSsn(), teacherRequest.getPhoneNumber(), teacherRequest.getEmail());
 
         // DTO --> POJO
         User teacher = userMapper.mapTeacherRequestToUser(teacherRequest);
 
         teacher.setUserRole(userRoleService.getUserRole(RoleType.TEACHER));
+        teacher.setLessonsProgramList(lessonProgramSet);
         teacher.setPassword(passwordEncoder.encode(teacher.getPassword()));
-        if(teacherRequest.getIsAdvisorTeacher()){
+        if (teacherRequest.getIsAdvisorTeacher()) {
             teacher.setIsAdvisor(Boolean.TRUE);
         } else teacher.setIsAdvisor(Boolean.FALSE);
 
@@ -83,7 +90,10 @@ public class TeacherService {
 
         User user = methodHelper.isUserExist(userId);
         // !!! Parametrede gelen id bir teacher a ait degilse exception firlatiliyor
-        methodHelper.checkRole(user,RoleType.TEACHER);
+        methodHelper.checkRole(user, RoleType.TEACHER);
+
+        Set<LessonProgram> lessonProgramSet =
+                lessonProgramService.getLessonProgramById(teacherRequest.getLessonIdList());
 
 
         // !!! unique kontrolu
@@ -92,6 +102,7 @@ public class TeacherService {
         User updatedTeacher = userMapper.mapTeacherRequestToUpdatedUser(teacherRequest, userId);
         // !!! props. that does n't exist in mappers
         updatedTeacher.setPassword(passwordEncoder.encode(teacherRequest.getPassword()));
+        updatedTeacher.setLessonsProgramList(lessonProgramSet);
         updatedTeacher.setUserRole(userRoleService.getUserRole(RoleType.TEACHER));
 
         User savedTeacher = userRepository.save(updatedTeacher);
@@ -108,10 +119,10 @@ public class TeacherService {
         // !!! Save de yazdigimiz ya varsa kontrolu
         User teacher = methodHelper.isUserExist(teacherId);
         // !!! id ile gelen uer Teacher mi kontrolu
-        methodHelper.checkRole(teacher,RoleType.TEACHER);
+        methodHelper.checkRole(teacher, RoleType.TEACHER);
 
         // !!! id ile gelen teacher zaten advisor mi kontrolu ?
-        if(Boolean.TRUE.equals(teacher.getIsAdvisor())) { // condition : teacher.getIsAdvisor()
+        if (Boolean.TRUE.equals(teacher.getIsAdvisor())) { // condition : teacher.getIsAdvisor()
             throw new ConflictException(
                     String.format(ErrorMessages.ALREADY_EXIST_ADVISOR_MESSAGE, teacherId));
         }
@@ -129,7 +140,7 @@ public class TeacherService {
     public ResponseMessage<UserResponse> deleteAdvisorTeacherById(Long teacherId) {
         User teacher = methodHelper.isUserExist(teacherId);
         // !!! id ile gelen user Teacher mi kontrolu
-        methodHelper.checkRole(teacher,RoleType.TEACHER);
+        methodHelper.checkRole(teacher, RoleType.TEACHER);
 
         // !!! id ile gelen teacheradvisor mi kontrolu ?
         methodHelper.checkAdvisor(teacher);
@@ -139,7 +150,7 @@ public class TeacherService {
 
         // !!! silinen advisor Teacherlarin Student lari varsa bu iliskinin de koparilmasi gerekiyor
         List<User> allStudents = userRepository.findByAdvisorTeacherId(teacherId);
-        if(!allStudents.isEmpty()) {
+        if (!allStudents.isEmpty()) {
             allStudents.forEach(students -> students.setAdvisorTeacherId(null));
         }
 
@@ -148,5 +159,25 @@ public class TeacherService {
                 .object(userMapper.mapUserToUserResponse(teacher))
                 .httpStatus(HttpStatus.OK)
                 .build();
+    }
+
+    public ResponseMessage<TeacherResponse> addLessonProgram(ChooseLessonTeacherRequest chooseLessonTeacherRequest) {
+        User teacher = methodHelper.isUserExist(chooseLessonTeacherRequest.getTeacherId());
+        methodHelper.checkRole(teacher, RoleType.TEACHER);
+
+        Set<LessonProgram> lessonPrograms = lessonProgramService.getLessonProgramById(chooseLessonTeacherRequest.getLessonProgramId());
+        Set<LessonProgram> teacherLessonProgram = teacher.getLessonsProgramList();
+
+        //TODO : Conflict kontrolü
+        teacherLessonProgram.addAll(lessonPrograms);
+        teacher.setLessonsProgramList(teacherLessonProgram);
+        User savedTeacher = userRepository.save(teacher);
+
+        return ResponseMessage.<TeacherResponse>builder()
+                .message(SuccessMessages.LESSON_PROGRAM_ADD_TO_TEACHER)
+                .httpStatus(HttpStatus.OK)
+                .object(userMapper.mapUserToTeacherResponse(savedTeacher))
+                .build();
+
     }
 }

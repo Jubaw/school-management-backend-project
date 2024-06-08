@@ -1,5 +1,6 @@
 package com.project.controller.user;
 
+import com.project.payload.request.business.ChooseLessonTeacherRequest;
 import com.project.payload.request.user.TeacherRequest;
 import com.project.payload.response.business.ResponseMessage;
 import com.project.payload.response.user.StudentResponse;
@@ -30,7 +31,7 @@ public class TeacherController {
 
     // Not: ODEVVV updateTeacherById() ***************************************************
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
-    @PutMapping("/update/{userId}")  // http://localhost:8080/user/update/1
+    @PutMapping("/update/{userId}")  // http://localhost:8080/teacher/update/1
     public ResponseMessage<TeacherResponse> updateTeacherForManagers(@RequestBody @Valid TeacherRequest teacherRequest,
                                                                      @PathVariable Long userId) {
         return teacherService.updateTeacherForManagers(teacherRequest, userId);
@@ -67,6 +68,12 @@ public class TeacherController {
     }
 
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @PostMapping("/addLessonProgram") // http://localhost:8080/teacher/addLessonProgram
+    public ResponseMessage<TeacherResponse> chooseLesson(@RequestBody @Valid
+                                                         ChooseLessonTeacherRequest chooseLessonTeacherRequest
+    ){
+        return teacherService.addLessonProgram(chooseLessonTeacherRequest);
 
-
+    }
 }

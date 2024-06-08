@@ -38,6 +38,7 @@ public class ErrorMessages {
     public static final String TIME_NOT_VALID_MESSAGE = "Error: incorrect time";
 
     public static final String NOT_FOUND_LESSON_PROGRAM_MESSAGE = "Error: Lesson program with this field %s not found";
+    public static final String NOT_FOUND_LESSON_PROGRAM_MESSAGE_WITHOUT_ID_INFO = "Error: Lesson program with this field not found";
 
     public static final String NOT_FOUND_MEET = "Error: Meet with id %s not found";
     public static final String MEET_HOURS_CONFLICT = "meet hours has conflict with existing meets";
