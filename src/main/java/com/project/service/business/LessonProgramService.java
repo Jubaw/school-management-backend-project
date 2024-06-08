@@ -93,7 +93,7 @@ public class LessonProgramService {
 
     private LessonProgram isLessonProgramExistById(Long id){
         return lessonProgramRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_LESSON_MESSAGE,id)));
+                .orElseThrow(()-> new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_LESSON_PROGRAM_MESSAGE,id)));
     }
 
     public List<LessonProgramResponse>getAllAssigned(){

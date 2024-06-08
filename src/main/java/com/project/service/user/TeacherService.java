@@ -35,7 +35,6 @@ public class TeacherService {
 
     public ResponseMessage<TeacherResponse> saveTeacher(TeacherRequest teacherRequest) {
 
-        // TODO : LessonProgram eklenecek
 
         //!!! unique kontrolu
         uniquePropertyValidator.checkDuplicate(teacherRequest.getUsername(),
@@ -45,7 +44,6 @@ public class TeacherService {
         User teacher = userMapper.mapTeacherRequestToUser(teacherRequest);
 
         teacher.setUserRole(userRoleService.getUserRole(RoleType.TEACHER));
-        //TODO: LessonProgram eklenecek.
         teacher.setPassword(passwordEncoder.encode(teacher.getPassword()));
         if(teacherRequest.getIsAdvisorTeacher()){
             teacher.setIsAdvisor(Boolean.TRUE);
@@ -62,7 +60,7 @@ public class TeacherService {
 
     public List<StudentResponse> getAllStudentByAdvisorUsername(String userName) {
 
-        User teacher = methodHelper.isUserExistsByUsername(userName);
+        User teacher = methodHelper.isUserExistByUsername(userName);
 
         methodHelper.checkAdvisor(teacher);
 
@@ -87,7 +85,6 @@ public class TeacherService {
         // !!! Parametrede gelen id bir teacher a ait degilse exception firlatiliyor
         methodHelper.checkRole(user,RoleType.TEACHER);
 
-        //!!! TODO: LessonProgramlar getiriliyor
 
         // !!! unique kontrolu
         uniquePropertyValidator.checkUniqueProperties(user, teacherRequest);
@@ -95,7 +92,6 @@ public class TeacherService {
         User updatedTeacher = userMapper.mapTeacherRequestToUpdatedUser(teacherRequest, userId);
         // !!! props. that does n't exist in mappers
         updatedTeacher.setPassword(passwordEncoder.encode(teacherRequest.getPassword()));
-        // !!! TODO: LessonProgram sonrasi eklenecek
         updatedTeacher.setUserRole(userRoleService.getUserRole(RoleType.TEACHER));
 
         User savedTeacher = userRepository.save(updatedTeacher);

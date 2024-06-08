@@ -75,7 +75,7 @@ public class ContactMessageController {
     public ResponseEntity<String> deleteById(@RequestParam(value = "contactMessageId") Long contactMessageId){
         return ResponseEntity.ok(contactMessageService.deleteById(contactMessageId)); // servisdeki ayni metod
 
-        //TODO: RETURN NO CONTENT TYPE (204)
+
     }
 
     @GetMapping("/searchBetweenDates")  //http://localhost:8080/contactMessages/searchBetweenDates?beginDate=2023-09-13&endDate=2023-09-15   + GET

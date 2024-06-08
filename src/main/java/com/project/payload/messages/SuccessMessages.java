@@ -2,6 +2,7 @@ package com.project.payload.messages;
 
 public class SuccessMessages {
 
+
     private SuccessMessages() {
     }
 
@@ -33,5 +34,16 @@ public class SuccessMessages {
 
     public static final String LESSON_PROGRAM_SAVE = "Lesson Program is saved Successfully";
     public static final String LESSON_PROGRAM_DELETE = "Lesson Program is Deleted Successfully";
+
+    public static final String STUDENT_INFO_SAVE = "Student Info has been saved successfully";
+    public static final String STUDENT_INFO_UPDATE = "Student Info has been updated successfully";
+    public static final String STUDENT_INFO_DELETE = "Student Info has been deleted successfully";
+
+
+
+    public static final String MEET_FOUND = "Meet has been found successfully";
+    public static final String MEET_SAVE = "Meet has been saved successfully";
+    public static final String MEET_UPDATE = "Meet has been updated successfully";
+    public static final String MEET_DELETE = "Meet has been deleted successfully";
 
 }

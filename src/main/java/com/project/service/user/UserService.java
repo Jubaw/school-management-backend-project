@@ -194,5 +194,8 @@ public class UserService {
     }
 
 
+    public List<User>getStudentById(Long[]studentIds){
+        return userRepository.findByIdsEquals(studentIds);
+    }
 }
 

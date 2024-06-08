@@ -1,6 +1,5 @@
 package com.project.service.user;
 
-import com.project.entity.concretes.business.LessonProgram;
 import com.project.entity.concretes.user.User;
 import com.project.entity.enums.RoleType;
 import com.project.payload.mappers.UserMapper;
@@ -19,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor

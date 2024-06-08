@@ -51,6 +51,5 @@ public class StudentController {
     public ResponseMessage changeStatusOfStudent (@RequestParam Long id, @RequestParam boolean status){
         return studentService.changeStatusOfStudent(id,status);
     }
-    // TODO : LESSON PROGRAM
 
 }

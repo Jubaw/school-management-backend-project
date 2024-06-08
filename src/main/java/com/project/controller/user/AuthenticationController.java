@@ -38,19 +38,4 @@ public class AuthenticationController {
         String response = SuccessMessages.PASSWORD_CHANGED_RESPONSE_MESSAGE; // paylod.messages
         return ResponseEntity.ok(response);
     }
-
-
-
-
-
-    //TODO: HomeWork: AuthenticateUser service layer
-
-    //TODO: HomeWokr: updatePassword(); --> Controller and service
-
-
-
-
-
-
-
 }

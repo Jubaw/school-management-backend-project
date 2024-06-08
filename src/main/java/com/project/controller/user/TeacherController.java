@@ -66,7 +66,6 @@ public class TeacherController {
         return teacherService.getAllAdvisorTeacher();
     }
 
-    // TODO: LESSON PROGRAM ekleme
 
 
 
