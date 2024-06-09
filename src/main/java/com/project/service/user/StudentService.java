@@ -14,6 +14,7 @@ import com.project.payload.response.user.StudentResponse;
 import com.project.repository.user.UserRepository;
 import com.project.service.business.LessonProgramService;
 import com.project.service.helper.MethodHelper;
+import com.project.service.validator.DateTimeValidator;
 import com.project.service.validator.UniquePropertyValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,8 +36,7 @@ public class StudentService {
     private final PasswordEncoder passwordEncoder;
     private final UserRoleService userRoleService;
     private final LessonProgramService lessonProgramService;
-
-
+    private final DateTimeValidator dateTimeValidator;
 
 
     public ResponseMessage<StudentResponse> saveStudent(StudentRequest studentRequest) {
@@ -61,13 +61,13 @@ public class StudentService {
                 .build();
     }
 
-    private int getLastNumber(){
+    private int getLastNumber() {
         //DB de hıc ogrencı yoksa  ogrencı numarası olarak 1000 gonderıyoruz
-        if(!userRepository.findStudent(RoleType.STUDENT)){
+        if (!userRepository.findStudent(RoleType.STUDENT)) {
             return 1000;
         }
 
-        return userRepository.getMaxStudentNumber() + 1 ;
+        return userRepository.getMaxStudentNumber() + 1;
     }
 
     // Not: updateStudent() **********************************************************
@@ -75,7 +75,7 @@ public class StudentService {
                                                                      StudentRequest studentRequest) {
         User user = methodHelper.isUserExist(userId);
         // !!! Parametrede gelen id bir student'a ait degilse exception firlatiliyor
-        methodHelper.checkRole(user,RoleType.STUDENT);
+        methodHelper.checkRole(user, RoleType.STUDENT);
         // !!! unique kontrolu
         uniquePropertyValidator.checkUniqueProperties(user, studentRequest);
 
@@ -99,12 +99,13 @@ public class StudentService {
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
+
     // Not: ChangeActıveStatusOfStudent() ***********************************************
     public ResponseMessage changeStatusOfStudent(Long studentId, boolean status) {
 
         User student = methodHelper.isUserExist(studentId);
 
-        methodHelper.checkRole(student,RoleType.STUDENT);
+        methodHelper.checkRole(student, RoleType.STUDENT);
         student.setActive(status);
         userRepository.save(student);
         return ResponseMessage.builder()
@@ -112,6 +113,7 @@ public class StudentService {
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
+
     // Not: updateStudentForStudents() **********************************************************
     public ResponseEntity<String> updateStudent(StudentRequestWithoutPassword studentRequest,
                                                 HttpServletRequest request) {
@@ -146,7 +148,7 @@ public class StudentService {
                 lessonProgramService.getLessonProgramById(chooseLessonProgramWithId.getLessonProgramId());
         Set<LessonProgram> studentCurrentLessonProgram = student.getLessonsProgramList();
 
-        // TODO Soru : Herhangi ekstra bir kontrol gerekli mi ?
+        dateTimeValidator.checkLessonPrograms(studentCurrentLessonProgram, lessonProgramSet);
         studentCurrentLessonProgram.addAll(lessonProgramSet);
         student.setLessonsProgramList(studentCurrentLessonProgram);
 

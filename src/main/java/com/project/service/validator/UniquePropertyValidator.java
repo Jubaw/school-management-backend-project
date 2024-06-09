@@ -1,5 +1,6 @@
 package com.project.service.validator;
 
+import com.project.entity.concretes.business.LessonProgram;
 import com.project.exception.ConflictException;
 import com.project.payload.messages.ErrorMessages;
 import com.project.repository.user.UserRepository;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import com.project.entity.concretes.user.User;
 import com.project.payload.request.abstracts.AbstractUserRequest;
+
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -62,7 +65,9 @@ public class UniquePropertyValidator {
         if(isChanged) {
             checkDuplicate(updatedUsername, updatedSnn, updatedPhone, updatedEmail);
         }
-
     }
+
+
+
 }
 
